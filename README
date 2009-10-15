@@ -1,0 +1,60 @@
+Finance-Bank-ID-Mandiri
+
+This module provide a rudimentary interface to the web-based online banking
+interface of the Indonesian "Bank Mandiri" at https://ib.bankmandiri.co.id.
+
+Warning: This module is neither offical nor is it tested to be 100% save!
+Because of the nature of web-robots, everything may break from one day to the
+other when the underlaying web interface changes.
+
+WARNING
+
+This warning is from Simon Cozens' Finance::Bank::LloydsTSB, and seems just as
+apt here.
+
+This is code for online banking, and that means your money, and that means BE
+CAREFUL. You are encouraged, nay, expected, to audit the source of this module
+yourself to reassure yourself that I am not doing anything untoward with your
+banking data. This software is useful to me, but is provided under NO GUARANTEE,
+explicit or implied.
+
+INSTALLATION
+
+To install this module, run the following commands:
+
+	perl Makefile.PL
+	make
+	make test
+	make install
+
+SUPPORT AND DOCUMENTATION
+
+After installing, you can find documentation for this module with the
+perldoc command.
+
+    perldoc Finance::Bank::ID::Mandiri
+
+You can also look for information at:
+
+    RT, CPAN's request tracker
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Finance-Bank-ID-Mandiri
+
+    AnnoCPAN, Annotated CPAN documentation
+        http://annocpan.org/dist/Finance-Bank-ID-Mandiri
+
+    CPAN Ratings
+        http://cpanratings.perl.org/d/Finance-Bank-ID-Mandiri
+
+    Search CPAN
+        http://search.cpan.org/dist/Finance-Bank-ID-Mandiri/
+
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2009 Steven Haryanto
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See http://dev.perl.org/licenses/ for more information.

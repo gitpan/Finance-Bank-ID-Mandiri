@@ -1,0 +1,14 @@
+Changes
+MANIFEST
+Makefile.PL
+README
+examples/download-mandiri
+lib/Finance/Bank/ID/Mandiri.pm
+t/00-load.t
+t/01-parse_statement.t
+t/data/stmt1.ff35linux.txt
+t/data/stmt1.html
+t/data/stmt1.opera10linux.txt
+t/data/stmt2.txt
+t/pod-coverage.t
+t/pod.t
