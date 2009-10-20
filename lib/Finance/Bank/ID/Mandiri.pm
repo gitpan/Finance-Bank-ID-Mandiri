@@ -9,15 +9,15 @@ extends 'Finance::Bank::ID::Base';
 
 =head1 NAME
 
-Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts with Perl
+Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 =head1 SYNOPSIS
