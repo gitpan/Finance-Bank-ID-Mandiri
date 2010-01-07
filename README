@@ -1,60 +1,218 @@
-Finance-Bank-ID-Mandiri
+NAME
+    Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
-This module provide a rudimentary interface to the web-based online banking
-interface of the Indonesian "Bank Mandiri" at https://ib.bankmandiri.co.id.
+VERSION
+    version 0.03
 
-Warning: This module is neither offical nor is it tested to be 100% save!
-Because of the nature of web-robots, everything may break from one day to the
-other when the underlaying web interface changes.
+SYNOPSIS
+        use Finance::Bank::ID::Mandiri;
+
+        # FBI::Mandiri uses Log::Any. to show logs, use something like:
+        use Log::Log4perl qw(:easy);
+        use Log::Any::Adapter;
+        Log::Log4perl->easy_init($DEBUG);
+        Log::Any::Adapter->set('Log4perl');
+
+        my $ibank = Finance::Bank::ID::Mandiri->new(
+            username => '....', # optional if you're only using parse_statement()
+            password => '....', # idem
+        );
+
+        eval {
+            $ibank->login(); # dies on error
+
+            my $accts = $ibank->list_accounts();
+
+            my $bal = $ibank->check_balance($acct); # $acct is optional
+
+            my $stmt = $ibank->get_statement(
+                account    => ..., # opt, default account will be used if not specified
+                days       => 31,  # opt
+                start_date => DateTime->new(year=>2009, month=>10, day=>6),
+                                   # opt, takes precedence over 'days'
+                end_date   => DateTime->today, # opt, takes precedence over 'days'
+            );
+
+            print "Transactions: ";
+            for my $tx (@{ $stmt->{transactions} }) {
+                print "$tx->{date} $tx->{amount} $tx->{description}\n";
+            }
+        };
+
+        # remember to call this, otherwise you will have trouble logging in again
+        # for some time
+        if ($ibank->logged_in) { $ibank->logout() }
+
+        # utility routines
+        my $stmt = $ibank->parse_statement($html_or_copy_pasted_text);
+
+    Also see the examples/ subdirectory in the distribution for a sample
+    script using this module.
+
+DESCRIPTION
+    This module provide a rudimentary interface to the web-based online
+    banking interface of the Indonesian Bank Mandiri at
+    https://ib.bankmandiri.co.id. You will need either Crypt::SSLeay or
+    IO::Socket::SSL installed for HTTPS support to work. WWW::Mechanize is
+    required but you can supply your own mech-like object.
+
+    This module can only login to the retail/personal version of the site
+    and not the corporate/PT/CMS version as the later requires IE. But this
+    module can parse statement page from both versions (for CMS version,
+    only text version [copy paste result] is currently supported and not
+    HTML).
+
+    Warning: This module is neither offical nor is it tested to be 100%
+    save! Because of the nature of web-robots, everything may break from one
+    day to the other when the underlying web interface changes.
 
 WARNING
+    This warning is from Simon Cozens' "Finance::Bank::LloydsTSB", and seems
+    just as apt here.
 
-This warning is from Simon Cozens' Finance::Bank::LloydsTSB, and seems just as
-apt here.
+    This is code for online banking, and that means your money, and that
+    means BE CAREFUL. You are encouraged, nay, expected, to audit the source
+    of this module yourself to reassure yourself that I am not doing
+    anything untoward with your banking data. This software is useful to me,
+    but is provided under NO GUARANTEE, explicit or implied.
 
-This is code for online banking, and that means your money, and that means BE
-CAREFUL. You are encouraged, nay, expected, to audit the source of this module
-yourself to reassure yourself that I am not doing anything untoward with your
-banking data. This software is useful to me, but is provided under NO GUARANTEE,
-explicit or implied.
+ERROR HANDLING AND DEBUGGING
+    Most methods die() when encountering errors, so you can use eval() to
+    trap them.
 
-INSTALLATION
+    This module uses Log::Any, so you can see more debugging statements on
+    your screen, log files, etc.
 
-To install this module, run the following commands:
+    Full response headers and bodies are dumped to a separate logger. See
+    documentation on "new()" below and the sample script in examples/
+    subdirectory in the distribution.
 
-	perl Makefile.PL
-	make
-	make test
-	make install
+ATTRIBUTES
+METHODS
+  new(%args)
+    Create a new instance. %args keys:
 
-SUPPORT AND DOCUMENTATION
+    *   username
 
-After installing, you can find documentation for this module with the
-perldoc command.
+        Optional if you are just using utility methods like
+        "parse_statement()" and not "login()" etc.
 
-    perldoc Finance::Bank::ID::Mandiri
+    *   password
 
-You can also look for information at:
+        Optional if you are just using utility methods like
+        "parse_statement()" and not "login()" etc.
 
-    RT, CPAN's request tracker
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Finance-Bank-ID-Mandiri
+    *   mech
 
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/Finance-Bank-ID-Mandiri
+        Optional. A WWW::Mechanize-like object. By default this module
+        instantiate a new WWW::Mechanize object to retrieve web pages, but
+        if you want to use a custom/different one, you are allowed to do so
+        here. Use cases include: you want to retry and increase timeout due
+        to slow/unreliable network connection (using
+        WWW::Mechanize::Plugin::Retry), you want to slow things down using
+        WWW::Mechanize::Sleepy, you want to use IE engine using
+        Win32::IE::Mechanize, etc.
 
-    CPAN Ratings
-        http://cpanratings.perl.org/d/Finance-Bank-ID-Mandiri
+    *   logger
 
-    Search CPAN
-        http://search.cpan.org/dist/Finance-Bank-ID-Mandiri/
+        Optional. You can supply a Log::Any-like object here. If not
+        specified, this module will use a default logger.
 
+    *   logger_dump
 
-COPYRIGHT AND LICENCE
+        Optional. You can supply a Log::Any-like object here. This is just
+        like "logger" but this module will log contents of response bodies
+        here for debugging purposes. You can use with something like
+        Log::Dispatch::Dir to save web pages more conveniently as separate
+        files.
 
-Copyright (C) 2009 Steven Haryanto
+  login()
+    Login to the net banking site. You actually do not have to do this
+    explicitly as login() is called by other methods like "check_balance()"
+    or "get_statement()".
 
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
+    If login is successful, "logged_in" will be set to true and subsequent
+    calls to "login()" will become a no-op until "logout()" is called.
 
-See http://dev.perl.org/licenses/ for more information.
+    Dies on failure.
+
+  logout()
+    Logout from the net banking site. You need to call this at the end of
+    your program, otherwise the site will prevent you from re-logging in for
+    some time (e.g. 10 minutes).
+
+    If logout is successful, "logged_in" will be set to false and subsequent
+    calls to "logout()" will become a no-op until "login()" is called.
+
+    Dies on failure.
+
+  list_accounts()
+  check_balance([$acct])
+  get_statement(%args)
+    Get account statement. %args keys:
+
+    *   account
+
+        Optional. Select the account to get statement of. If not specified,
+        will use the already selected account.
+
+    *   days
+
+        Optional. Number of days between 1 and 31. If days is 1, then start
+        date and end date will be the same. Default is 31.
+
+    *   start_date
+
+        Optional. Default is end_date - days.
+
+    *   end_date
+
+        Optional. Default is today (or some 1+ days from today if today is a
+        Saturday/Sunday/holiday, depending on the default value set by the
+        site's form).
+
+  parse_statement($html_or_text, %opts)
+    Given the HTML/copy-pasted text of the account statement results page,
+    parse it into structured data:
+
+     $stmt = {
+        start_date     => $start_dt, # a DateTime object
+        end_date       => $end_dt,   # a DateTime object
+        account_holder => STRING,
+        account        => STRING,    # account number
+        currency       => STRING,    # 3-digit currency code
+        transactions   => [
+            # first transaction
+            {
+              date        => $dt, # a DateTime object, book date ("tanggal pembukuan")
+              seq         => INT, # a number >= 1 which marks the sequence of transactions for the day
+              amount      => REAL, # a real number, positive means credit (deposit), negative means debit (withdrawal)
+              description => STRING,
+              is_pending  => BOOL,
+              branch      => STRING, # a 4-digit branch/ATM code
+              balance     => REAL,
+            },
+            # second transaction
+            ...
+        ]
+     }
+
+    If parsing failed, will return undef.
+
+    In list context, this method will return HTTP-style response instead:
+
+     ($status, $err_details, $stmt)
+
+    $status is 200 if successful or some other 3-letter code if parsing
+    failed. $stmt is the result (structure as above, or undef if parsing
+    failed).
+
+AUTHOR
+      Steven Haryanto <stevenharyanto@gmail.com>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2010 by Steven Haryanto.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+

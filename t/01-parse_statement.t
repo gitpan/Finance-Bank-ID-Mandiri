@@ -1,17 +1,14 @@
 #!perl -Tw
 
 use strict;
-use Test::More tests => (1 + 3*10 + 1*12);
+use Test::More tests => (3*10 + 1*12);
 use DateTime;
 use File::Slurp;
 use FindBin '$Bin';
 use Log::Log4perl qw(:easy);
+use Finance::Bank::ID::Mandiri;
 
 Log::Log4perl->easy_init($ERROR);
-
-BEGIN {
-    use_ok('Finance::Bank::ID::Mandiri');
-}
 
 my $ibank = Finance::Bank::ID::Mandiri->new();
 
