@@ -1,5 +1,5 @@
 package Finance::Bank::ID::Mandiri;
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 # ABSTRACT: Check your Bank Mandiri accounts from Perl
 
 
@@ -450,7 +450,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.03
+version 0.04
 
 =head1 SYNOPSIS
 

@@ -5,10 +5,7 @@ use Test::More tests => (3*10 + 1*12);
 use DateTime;
 use File::Slurp;
 use FindBin '$Bin';
-use Log::Log4perl qw(:easy);
 use Finance::Bank::ID::Mandiri;
-
-Log::Log4perl->easy_init($ERROR);
 
 my $ibank = Finance::Bank::ID::Mandiri->new();
 
