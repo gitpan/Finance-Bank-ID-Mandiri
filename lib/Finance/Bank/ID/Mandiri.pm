@@ -1,9 +1,9 @@
 package Finance::Bank::ID::Mandiri;
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 # ABSTRACT: Check your Bank Mandiri accounts from Perl
 
 
-use Moose;
+use Any::Moose;
 use DateTime;
 
 extends 'Finance::Bank::ID::Base';
@@ -438,7 +438,7 @@ sub _ps_get_transactions_pt {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Any::Moose;
 1;
 
 __END__
@@ -450,7 +450,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 SYNOPSIS
 
