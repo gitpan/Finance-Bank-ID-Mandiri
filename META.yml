@@ -3,24 +3,26 @@ abstract: 'Check your Bank Mandiri accounts from Perl'
 author:
   - 'Steven Haryanto <stevenharyanto@gmail.com>'
 build_requires:
-  Module::Build: 0.35
+  Module::Build: 0.3601
 configure_requires:
-  Module::Build: 0.35
-generated_by: 'Dist::Zilla version 1.093400'
+  Module::Build: 0.3601
+generated_by: 'Dist::Zilla version 2.101241'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Finance-Bank-ID-Mandiri
+recommends: {}
 requires:
   Any::Moose: 0
   Data::Dumper: 0
   File::Slurp: 0
-  Finance::Bank::ID::BCA: 0
+  Finance::Bank::ID::BCA: 0.08
   Log::Any: 0
   Mouse: 0
-  Pod::Coverage: 0.18
-  Test::More: 0
-  Test::Pod::Coverage: 1.08
   WWW::Mechanize: 0
-version: 0.05
+  perl: 5.010000
+resources:
+  homepage: http://search.cpan.org/dist/perl-Finance-Bank-ID-Mandiri/
+  repository: http://github.com/sharyanto/perl-Finance-Bank-ID-Mandiri
+version: 0.06

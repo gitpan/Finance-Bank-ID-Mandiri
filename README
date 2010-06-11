@@ -2,7 +2,7 @@ NAME
     Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 VERSION
-    version 0.05
+    version 0.06
 
 SYNOPSIS
         use Finance::Bank::ID::Mandiri;
@@ -197,11 +197,9 @@ METHODS
         ]
      }
 
-    If parsing failed, will return undef.
+    Returns:
 
-    In list context, this method will return HTTP-style response instead:
-
-     ($status, $err_details, $stmt)
+     [$status, $err_details, $stmt]
 
     $status is 200 if successful or some other 3-letter code if parsing
     failed. $stmt is the result (structure as above, or undef if parsing
