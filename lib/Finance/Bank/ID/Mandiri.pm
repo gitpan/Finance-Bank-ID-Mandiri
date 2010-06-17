@@ -1,6 +1,6 @@
 package Finance::Bank::ID::Mandiri;
 BEGIN {
-  $Finance::Bank::ID::Mandiri::VERSION = '0.06';
+  $Finance::Bank::ID::Mandiri::VERSION = '0.09';
 }
 # ABSTRACT: Check your Bank Mandiri accounts from Perl
 
@@ -452,7 +452,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.06
+version 0.09
 
 =head1 SYNOPSIS
 
@@ -655,9 +655,6 @@ into structured data:
           seq         => INT, # a number >= 1 which marks the sequence of transactions for the day
           amount      => REAL, # a real number, positive means credit (deposit), negative means debit (withdrawal)
           description => STRING,
-          is_pending  => BOOL,
-          branch      => STRING, # a 4-digit branch/ATM code
-          balance     => REAL,
         },
         # second transaction
         ...
