@@ -1,6 +1,6 @@
 package Finance::Bank::ID::Mandiri;
 BEGIN {
-  $Finance::Bank::ID::Mandiri::VERSION = '0.10';
+  $Finance::Bank::ID::Mandiri::VERSION = '0.11';
 }
 # ABSTRACT: Check your Bank Mandiri accounts from Perl
 
@@ -28,6 +28,7 @@ sub BUILD {
     my ($self, $args) = @_;
 
     $self->site("https://ib.bankmandiri.co.id") unless $self->site;
+    $self->https_host("ib.bankmandiri.co.id") unless $self->https_host;
 }
 
 
@@ -452,7 +453,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 
