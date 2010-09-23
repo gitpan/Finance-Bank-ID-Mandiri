@@ -2,7 +2,7 @@ NAME
     Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 VERSION
-    version 0.09
+    version 0.10
 
 SYNOPSIS
         use Finance::Bank::ID::Mandiri;
@@ -16,6 +16,8 @@ SYNOPSIS
         my $ibank = Finance::Bank::ID::Mandiri->new(
             username => '....', # optional if you're only using parse_statement()
             password => '....', # idem
+            verify_https => 1,          # default is 0
+            #https_ca_dir => '/etc/ssl/certs', # default is already /etc/ssl/certs
         );
 
         eval {
@@ -105,13 +107,30 @@ METHODS
     *   mech
 
         Optional. A WWW::Mechanize-like object. By default this module
-        instantiate a new WWW::Mechanize object to retrieve web pages, but
-        if you want to use a custom/different one, you are allowed to do so
-        here. Use cases include: you want to retry and increase timeout due
-        to slow/unreliable network connection (using
+        instantiate a new Finance::BankUtils::ID::Mechanize (a
+        WWW::Mechanize subclass) object to retrieve web pages, but if you
+        want to use a custom/different one, you are allowed to do so here.
+        Use cases include: you want to retry and increase timeout due to
+        slow/unreliable network connection (using
         WWW::Mechanize::Plugin::Retry), you want to slow things down using
         WWW::Mechanize::Sleepy, you want to use IE engine using
         Win32::IE::Mechanize, etc.
+
+    *   verify_https
+
+        Optional. If you are using the default mech object (see previous
+        option), you can set this option to 1 to enable SSL certificate
+        verification (recommended for security). Default is 0.
+
+        SSL verification will require a CA bundle directory, default is
+        /etc/ssl/certs. Adjust https_ca_dir option if your CA bundle is not
+        located in that directory.
+
+    *   https_ca_dir
+
+        Optional. Default is /etc/ssl/certs. Used to set HTTPS_CA_DIR
+        environment variable for enabling certificate checking in
+        Crypt::SSLeay. Only used if verify_https is on.
 
     *   logger
 
@@ -203,7 +222,7 @@ METHODS
     failed).
 
 AUTHOR
-      Steven Haryanto <stevenharyanto@gmail.com>
+    Steven Haryanto <stevenharyanto@gmail.com>
 
 COPYRIGHT AND LICENSE
     This software is copyright (c) 2010 by Steven Haryanto.
