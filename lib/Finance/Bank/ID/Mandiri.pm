@@ -1,6 +1,6 @@
 package Finance::Bank::ID::Mandiri;
 BEGIN {
-  $Finance::Bank::ID::Mandiri::VERSION = '0.11';
+  $Finance::Bank::ID::Mandiri::VERSION = '0.12';
 }
 # ABSTRACT: Check your Bank Mandiri accounts from Perl
 
@@ -182,10 +182,13 @@ sub get_statement {
 sub _ps_detect {
     my ($self, $page) = @_;
     if ($page =~ /(?:^|"header">)HISTORI TRANSAKSI/m) {
-        $self->_variant('retail');
+        $self->_variant('ib');
         return '';
     } elsif ($page =~ /^CMS-Mandiri/ms) {
-        $self->_variant('pt');
+        $self->_variant('cms');
+        return '';
+    } elsif ($page =~ /^\d{13};/s) {
+        $self->_variant('mcm');
         return '';
     } else {
         return "No Mandiri statement page signature found";
@@ -194,16 +197,18 @@ sub _ps_detect {
 
 sub _ps_get_metadata {
     my ($self, @args) = @_;
-    if ($self->_variant eq 'retail') {
-        $self->_ps_get_metadata_retail(@args);
-    } elsif ($self->_variant eq 'pt') {
-        $self->_ps_get_metadata_pt(@args);
+    if ($self->_variant eq 'ib') {
+        $self->_ps_get_metadata_ib(@args);
+    } elsif ($self->_variant eq 'cms') {
+        $self->_ps_get_metadata_cms(@args);
+    } elsif ($self->_variant eq 'mcm') {
+        $self->_ps_get_metadata_mcm(@args);
     } else {
         return "internal bug: _variant not yet set";
     }
 }
 
-sub _ps_get_metadata_retail {
+sub _ps_get_metadata_ib {
     my ($self, $page, $stmt) = @_;
 
     unless ($page =~ /Tampilkan Berdasarkan(?:\s+|(?:<[^>]+>\s*)*):(?:\s+|(?:<[^>]+>\s*)*)Tanggal(?:\s+|(?:<[^>]+>\s*)*)Urutkan Berdasarkan(?:\s+|(?:<[^>]+>\s*)*):(?:\s+|(?:<[^>]+>\s*)*)Mulai dari yang kecil/s) {
@@ -263,7 +268,7 @@ sub _ps_get_metadata_retail {
     "";
 }
 
-sub _ps_get_metadata_pt {
+sub _ps_get_metadata_cms {
     my ($self, $page, $stmt) = @_;
 
     unless ($page =~ /^- End Of Statement -/m) {
@@ -309,18 +314,44 @@ sub _ps_get_metadata_pt {
     "";
 }
 
+sub _ps_get_metadata_mcm {
+    my ($self, $page, $stmt) = @_;
+
+    unless ($page =~ m!^(\d{13});(\w{3});(\d\d)/(\d\d)/(\d\d\d\d)!) {
+        return "can't get account number & currency & date";
+    }
+    $stmt->{account} = $1;
+    $stmt->{currency} = $2;
+    $stmt->{start_date} = DateTime->new(day=>$3, month=>$4, year=>$5);
+
+    # we'll just assume the first and last transaction date to be start and end
+    # date of statement, because the semicolon format doesn't include any other
+    # metadata.
+    if ($page =~ m!.+^(\d{13});(\w{3});(\d\d)/(\d\d)/(\d\d\d\d)!ms) {
+        $stmt->{end_date} = DateTime->new(day=>$3, month=>$4, year=>$5);
+    }
+
+    # Mandiri sucks, doesn't provide total credit/debit in statement
+    my $n = 0;
+    while ($page =~ m!^\d{13};!mg) { $n++ }
+    $stmt->{_num_tx_in_stmt} = $n;
+    "";
+}
+
 sub _ps_get_transactions {
     my ($self, @args) = @_;
-    if ($self->_variant eq 'retail') {
-        $self->_ps_get_transactions_retail(@args);
-    } elsif ($self->_variant eq 'pt') {
-        $self->_ps_get_transactions_pt(@args);
+    if ($self->_variant eq 'ib') {
+        $self->_ps_get_transactions_ib(@args);
+    } elsif ($self->_variant eq 'cms') {
+        $self->_ps_get_transactions_cms(@args);
+    } elsif ($self->_variant eq 'mcm') {
+        $self->_ps_get_transactions_mcm(@args);
     } else {
         return "internal bug: _variant not yet set";
     }
 }
 
-sub _ps_get_transactions_retail {
+sub _ps_get_transactions_ib {
     my ($self, $page, $stmt) = @_;
 
     my @e;
@@ -386,7 +417,7 @@ sub _ps_get_transactions_retail {
     "";
 }
 
-sub _ps_get_transactions_pt {
+sub _ps_get_transactions_cms {
     my ($self, $page, $stmt) = @_;
 
     if ($page =~ /<br|<p/i) {
@@ -440,6 +471,54 @@ sub _ps_get_transactions_pt {
     "";
 }
 
+sub _ps_get_transactions_mcm {
+    my ($self, $page, $stmt) = @_;
+
+    my @rows;
+    while ($page =~ m!^(\d.+)!mg) {
+        push @rows, $1;
+    }
+
+    my @tx;
+    my $seq;
+    my $last_date;
+    for my $row (@rows) {
+        # account;currency;dd/mm/yyyyTTTT;description line 1;description line 2;amount(DR)?;balance
+        # TTTT is 4-digit transaction type code
+        my @f = split /;/, $row;
+        my $tx = {};
+
+        $f[0] eq $stmt->{account} or
+            return "Can't handle multiple accounts in transactions";
+        $f[1] eq $stmt->{currency} or
+            return "Can't handle multiple currencies in transactions";
+
+        $f[2] =~ m!(\d\d)/(\d\d)/(\d\d\d\d)! and
+            $tx->{date} = DateTime->new(day=>$1, month=>$2, year=>$3);
+
+        $tx->{description} = $f[3] . ($f[4] ? "\n" . $f[4] : "");
+
+        my $sign;
+        $sign = ($f[-2] =~ s/DR//) ? -1 : 1;
+        $tx->{amount}  = $sign * $f[-2];
+
+        $sign = ($f[-1] =~ s/DR//) ? -1 : 1;
+        $tx->{balance}  = $sign * $f[-1];
+
+        if (!$last_date || DateTime->compare($last_date, $tx->{date})) {
+            $seq = 1;
+            $last_date = $tx->{date};
+        } else {
+            $seq++;
+        }
+        $tx->{seq} = $seq;
+
+        push @tx, $tx;
+    }
+    $stmt->{transactions} = \@tx;
+    "";
+}
+
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 1;
@@ -453,7 +532,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.11
+version 0.12
 
 =head1 SYNOPSIS
 
@@ -506,19 +585,25 @@ this module.
 =head1 DESCRIPTION
 
 This module provide a rudimentary interface to the web-based online banking
-interface of the Indonesian B<Bank Mandiri> at
-https://ib.bankmandiri.co.id. You will need either L<Crypt::SSLeay> or
-L<IO::Socket::SSL> installed for HTTPS support to work. L<WWW::Mechanize> is
-required but you can supply your own mech-like object.
+interface of the Indonesian B<Bank Mandiri> at https://ib.bankmandiri.co.id
+(henceforth IB). You will need either L<Crypt::SSLeay> or L<IO::Socket::SSL>
+installed for HTTPS support to work (and strictly L<Crypt::SSLeay> to enable
+certificate verification). L<WWW::Mechanize> is required but you can supply your
+own mech-like object.
 
-This module can only login to the retail/personal version of the site and not
-the corporate/PT/CMS version as the later requires IE. But this module can
-parse statement page from both versions (for CMS version, only text version
-[copy paste result] is currently supported and not HTML).
+Aside from the above site for invididual accounts, there are also 2 other sites
+for corporate accounts: https://cms.bankmandiri.co.id/ecbanking/ (henceforth CMS)
+and https://mcm.bankmandiri.co.id/ (henceforth MCM). CMS is the older version and
+as of the end of Sept, 2010 has been discontinued.
 
-Warning: This module is neither offical nor is it tested to be 100% save!
-Because of the nature of web-robots, everything may break from one day to the
-other when the underlying web interface changes.
+This module currently can only login to IB and not CMS/MCM, but this module can
+parse statement page from all 3 sites. For CMS version, only text version [copy
+paste result] is currently supported and not HTML. For MCM, only semicolon format
+is currently supported.
+
+Warning: This module is neither offical nor is it tested to be 100% save! Because
+of the nature of web-robots, everything may break from one day to the other when
+the underlying web interface changes.
 
 =head1 WARNING
 

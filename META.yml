@@ -26,4 +26,4 @@ requires:
 resources:
   homepage: http://search.cpan.org/dist/Finance-Bank-ID-Mandiri/
   repository: http://github.com/sharyanto/perl-Finance-Bank-ID-Mandiri
-version: 0.11
+version: 0.12

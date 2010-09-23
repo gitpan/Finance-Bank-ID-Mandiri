@@ -2,7 +2,7 @@ NAME
     Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 VERSION
-    version 0.11
+    version 0.12
 
 SYNOPSIS
         use Finance::Bank::ID::Mandiri;
@@ -54,15 +54,21 @@ SYNOPSIS
 DESCRIPTION
     This module provide a rudimentary interface to the web-based online
     banking interface of the Indonesian Bank Mandiri at
-    https://ib.bankmandiri.co.id. You will need either Crypt::SSLeay or
-    IO::Socket::SSL installed for HTTPS support to work. WWW::Mechanize is
-    required but you can supply your own mech-like object.
+    https://ib.bankmandiri.co.id (henceforth IB). You will need either
+    Crypt::SSLeay or IO::Socket::SSL installed for HTTPS support to work
+    (and strictly Crypt::SSLeay to enable certificate verification).
+    WWW::Mechanize is required but you can supply your own mech-like object.
 
-    This module can only login to the retail/personal version of the site
-    and not the corporate/PT/CMS version as the later requires IE. But this
-    module can parse statement page from both versions (for CMS version,
-    only text version [copy paste result] is currently supported and not
-    HTML).
+    Aside from the above site for invididual accounts, there are also 2
+    other sites for corporate accounts:
+    https://cms.bankmandiri.co.id/ecbanking/ (henceforth CMS) and
+    https://mcm.bankmandiri.co.id/ (henceforth MCM). CMS is the older
+    version and as of the end of Sept, 2010 has been discontinued.
+
+    This module currently can only login to IB and not CMS/MCM, but this
+    module can parse statement page from all 3 sites. For CMS version, only
+    text version [copy paste result] is currently supported and not HTML.
+    For MCM, only semicolon format is currently supported.
 
     Warning: This module is neither offical nor is it tested to be 100%
     save! Because of the nature of web-robots, everything may break from one
