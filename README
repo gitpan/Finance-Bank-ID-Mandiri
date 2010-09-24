@@ -2,7 +2,7 @@ NAME
     Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 VERSION
-    version 0.12
+    version 0.13
 
 SYNOPSIS
         use Finance::Bank::ID::Mandiri;
