@@ -17,7 +17,7 @@ my %module_build_args = (
     'Steven Haryanto <stevenharyanto@gmail.com>'
   ],
   'dist_name' => 'Finance-Bank-ID-Mandiri',
-  'dist_version' => '0.13',
+  'dist_version' => '0.14',
   'license' => 'perl',
   'module_name' => 'Finance::Bank::ID::Mandiri',
   'recommends' => {},
@@ -29,6 +29,7 @@ my %module_build_args = (
     'File::Slurp' => '0',
     'Finance::Bank::ID::BCA' => '0.10',
     'Log::Any' => '0',
+    'Log::Any::App' => '0.23',
     'Mouse' => '0',
     'WWW::Mechanize' => '0',
     'perl' => '5.010000'

@@ -1,12 +1,11 @@
 Build.PL
 Changes
-Changes~
 LICENSE
 MANIFEST
+MANIFEST.SKIP
 META.yml
 README
 dist.ini
-dist.ini~
 examples/download-mandiri
 lib/Finance/Bank/ID/Mandiri.pm
 t/00-compile.t

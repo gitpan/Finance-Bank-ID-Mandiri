@@ -1,6 +1,6 @@
 package Finance::Bank::ID::Mandiri;
 BEGIN {
-  $Finance::Bank::ID::Mandiri::VERSION = '0.13';
+  $Finance::Bank::ID::Mandiri::VERSION = '0.14';
 }
 # ABSTRACT: Check your Bank Mandiri accounts from Perl
 
@@ -403,7 +403,7 @@ sub _ps_get_transactions_ib {
         # reversal and the pair will be removed anyway by Mandiri in the next
         # day's statement. currently can only handle pair in the same day and in
         # succession.
-        if ($seq > 1 && $tx->{description} =~ /^Reversal / &&
+        if ($seq > 1 && $tx->{description} =~ /^Reversal \(Error Correction\)/ &&
             $tx->{amount} == -$tx[-1]{amount}) {
             push @skipped_tx, pop(@tx);
             push @skipped_tx, $tx;
@@ -535,7 +535,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.13
+version 0.14
 
 =head1 SYNOPSIS
 
