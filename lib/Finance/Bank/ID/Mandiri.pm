@@ -1,11 +1,11 @@
 package Finance::Bank::ID::Mandiri;
 BEGIN {
-  $Finance::Bank::ID::Mandiri::VERSION = '0.14';
+  $Finance::Bank::ID::Mandiri::VERSION = '0.15';
 }
 # ABSTRACT: Check your Bank Mandiri accounts from Perl
 
 
-use Any::Moose;
+use Moo;
 use DateTime;
 
 extends 'Finance::Bank::ID::Base';
@@ -475,15 +475,26 @@ sub _ps_get_transactions_mcm {
     my ($self, $page, $stmt) = @_;
 
     my @rows;
+    my $i = 0;
     for (split /\r?\n/, $page) {
+        $i++;
         next unless /\S/;
-        m!^(\d{13});(\w{3});(\d\d)/(\d\d)/(\d\d\d\d)(\d\d\d\d);([^;]+);([^;]*);(\d+(?:\.\d\d?)?)(DR)?;(\d+(?:\.\d\d?)?)(DR)?$!mg
-            or return "Invalid line: $_";
-        push @rows, {
-            account=>$1, currency=>$2, day=>$3, month=>$4, year=>$5,
-            txcode=>$6, desc1=>$7, desc2=>$8, amount=>$9, amount_db=>$10,
-            balance=>$11, balance_db=>$12,
-        };
+        if      (m!^(\d{13});(\w{3});(\d\d)/(\d\d)/(\d\d\d\d)(\d\d\d\d);([^;]+);([^;]*);([^;]*);(\d+(?:\.\d\d?)?)(DR)?;(\d+(?:\.\d\d?)?)(DR)?$!mgx) {
+            push @rows, {
+                account   => $1, currency=> $2, day       => $3, month   => $4,
+                year      => $5, txcode  => $6, desc1     => $7, desc2   => $8,
+                desc3     => $9, amount  =>$10, amount_db =>$11, balance =>$12,
+                balance_db=>$13,
+            };
+        } elsif (m!^(\d{13});(\w{3});(\d\d)/(\d\d)/(\d\d\d\d)(\d\d\d\d);([^;]+);([^;]*);        (\d+(?:\.\d\d?)?)(DR)?;(\d+(?:\.\d\d?)?)(DR)?$!mgx) {
+            push @rows, {
+                account  => $1, currency => $2, day    => $3, month     => $4,
+                year     => $5, txcode   => $6, desc1  => $7, desc2     => $8,
+                amount   => $9, amount_db=>$10, balance=>$11, balance_db=>$12,
+            };
+        } else {
+            return "Invalid syntax in line $i: $_";
+        }
     }
 
     my @tx;
@@ -503,7 +514,8 @@ sub _ps_get_transactions_mcm {
         $tx->{txcode} = $row->{txcode};
 
         $tx->{description} = $row->{desc1} .
-            ($row->{desc2} ? "\n" . $row->{desc2} : "");
+            ($row->{desc2} ? "\n" . $row->{desc2} : "") .
+                ($row->{desc3} ? "\n" . $row->{desc3} : "");
 
         $tx->{amount}  = ($row->{amount_db}  ? -1 : 1) * $row->{amount};
         $tx->{balance} = ($row->{balance_db} ? -1 : 1) * $row->{balance};
@@ -522,8 +534,6 @@ sub _ps_get_transactions_mcm {
     "";
 }
 
-__PACKAGE__->meta->make_immutable;
-no Any::Moose;
 1;
 
 __END__
@@ -535,7 +545,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.14
+version 0.15
 
 =head1 SYNOPSIS
 
@@ -580,7 +590,7 @@ version 0.14
     if ($ibank->logged_in) { $ibank->logout() }
 
     # utility routines
-    my $stmt = $ibank->parse_statement($html_or_copy_pasted_text);
+    my $res = $ibank->parse_statement($html_or_copy_pasted_text);
 
 Also see the examples/ subdirectory in the distribution for a sample script using
 this module.
@@ -717,7 +727,7 @@ Dies on failure.
 
 =head2 check_balance([$acct])
 
-=head2 get_statement(%args)
+=head2 get_statement(%args) => $stmt
 
 Get account statement. %args keys:
 
@@ -744,7 +754,7 @@ Saturday/Sunday/holiday, depending on the default value set by the site's form).
 
 =back
 
-=head2 parse_statement($html_or_text, %opts)
+=head2 parse_statement($html_or_text, %opts) => $res
 
 Given the HTML/copy-pasted text of the account statement results page, parse it
 into structured data:
@@ -781,7 +791,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Steven Haryanto.
+This software is copyright (c) 2011 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

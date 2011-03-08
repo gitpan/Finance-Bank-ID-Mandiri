@@ -2,7 +2,7 @@ NAME
     Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 VERSION
-    version 0.14
+    version 0.15
 
 SYNOPSIS
         use Finance::Bank::ID::Mandiri;
@@ -46,7 +46,7 @@ SYNOPSIS
         if ($ibank->logged_in) { $ibank->logout() }
 
         # utility routines
-        my $stmt = $ibank->parse_statement($html_or_copy_pasted_text);
+        my $res = $ibank->parse_statement($html_or_copy_pasted_text);
 
     Also see the examples/ subdirectory in the distribution for a sample
     script using this module.
@@ -173,7 +173,7 @@ METHODS
 
   list_accounts()
   check_balance([$acct])
-  get_statement(%args)
+  get_statement(%args) => $stmt
     Get account statement. %args keys:
 
     *   account
@@ -196,7 +196,7 @@ METHODS
         Saturday/Sunday/holiday, depending on the default value set by the
         site's form).
 
-  parse_statement($html_or_text, %opts)
+  parse_statement($html_or_text, %opts) => $res
     Given the HTML/copy-pasted text of the account statement results page,
     parse it into structured data:
 
@@ -231,7 +231,7 @@ AUTHOR
     Steven Haryanto <stevenharyanto@gmail.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2010 by Steven Haryanto.
+    This software is copyright (c) 2011 by Steven Haryanto.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.

@@ -17,20 +17,19 @@ my %module_build_args = (
     'Steven Haryanto <stevenharyanto@gmail.com>'
   ],
   'dist_name' => 'Finance-Bank-ID-Mandiri',
-  'dist_version' => '0.14',
+  'dist_version' => '0.15',
   'license' => 'perl',
   'module_name' => 'Finance::Bank::ID::Mandiri',
   'recommends' => {},
   'recursive_test_files' => 1,
   'requires' => {
-    'Any::Moose' => '0',
     'Data::Dumper' => '0',
     'Data::Rmap' => '0',
     'File::Slurp' => '0',
-    'Finance::Bank::ID::BCA' => '0.10',
+    'Finance::Bank::ID::BCA' => '0.17',
     'Log::Any' => '0',
     'Log::Any::App' => '0.23',
-    'Mouse' => '0',
+    'Moo' => '0',
     'WWW::Mechanize' => '0',
     'perl' => '5.010000'
   },

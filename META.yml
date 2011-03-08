@@ -7,24 +7,23 @@ build_requires:
 configure_requires:
   Module::Build: 0.3601
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.102343, CPAN::Meta::Converter version 2.102400'
+generated_by: 'Dist::Zilla version 4.200003, CPAN::Meta::Converter version 2.102400'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Finance-Bank-ID-Mandiri
 requires:
-  Any::Moose: 0
   Data::Dumper: 0
   Data::Rmap: 0
   File::Slurp: 0
-  Finance::Bank::ID::BCA: 0.10
+  Finance::Bank::ID::BCA: 0.17
   Log::Any: 0
   Log::Any::App: 0.23
-  Mouse: 0
+  Moo: 0
   WWW::Mechanize: 0
   perl: 5.010000
 resources:
   homepage: http://search.cpan.org/dist/Finance-Bank-ID-Mandiri/
   repository: http://github.com/sharyanto/perl-Finance-Bank-ID-Mandiri
-version: 0.14
+version: 0.15
