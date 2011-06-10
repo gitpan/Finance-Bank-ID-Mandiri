@@ -17,7 +17,7 @@ my %module_build_args = (
     'Steven Haryanto <stevenharyanto@gmail.com>'
   ],
   'dist_name' => 'Finance-Bank-ID-Mandiri',
-  'dist_version' => '0.15',
+  'dist_version' => '0.16',
   'license' => 'perl',
   'module_name' => 'Finance::Bank::ID::Mandiri',
   'recommends' => {},
@@ -33,7 +33,9 @@ my %module_build_args = (
     'WWW::Mechanize' => '0',
     'perl' => '5.010000'
   },
-  'script_files' => []
+  'script_files' => [
+    'bin/download-mandiri'
+  ]
 );
 
 

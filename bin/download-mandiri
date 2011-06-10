@@ -1,17 +1,15 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
-# this is a command-line script which you can run from cron or
-# whatever to conveniently download statements. customize as needed.
-# using App::Options, you can put username and password in
-# ~/.app/download-mandiri.conf, e.g.:
-#
-# [ALL]
-# username = ABCDEF0123
-# password = 123456
-#
-# see App::Options for more details.
+# workaround for dzil
+package download_mandiri;
+BEGIN {
+  $download_mandiri::VERSION = '0.16';
+}
 
+use 5.010;
 use strict;
+use warnings;
+
 use Cwd;
 use Data::Rmap qw(:all);
 use File::HomeDir;
@@ -74,6 +72,10 @@ eval {
         $stmt->{end_date}->ymd;
     $log->info("Writing statements to YAML file `$filename' ...");
 
+    # insert balance to statement (since mandiri statement doesn't contain any
+    # balance information)
+    $stmt->{_balance} = $bal;
+
     # stringify DateTime objects so dump becomes simpler and shorter, the
     # $_[0]{seen} = {} is a trick to allow multiple places which mention the same
     # object to be converted (defeat circular checking)
@@ -90,3 +92,58 @@ if ($@) {
 eval { $ibank->logout; };
 
 $log->info("End session");
+
+
+
+=pod
+
+=head1 NAME
+
+download_mandiri
+
+=head1 VERSION
+
+version 0.16
+
+=head1 SYNOPSIS
+
+First, put your username and password in ~/.app/download-mandiri.conf, e.g.:
+
+ [ALL]
+ username = ABCDEF0123
+ password = 123456
+
+Then:
+
+ $ download-mandiri
+
+For quieter output:
+
+ $ QUIET=1 download-mandiri
+
+=head1 DESCRIPTION
+
+This is a command-line script which you can run from cron or whatever to
+conveniently download Bank Mandiri statements. By default, it downloads a
+month's worth of statements to ~/mandiri/. Future version will allow options.
+
+=head1 SEE ALSO
+
+L<Finance::Bank::ID::Mandiri>
+
+=head1 AUTHOR
+
+Steven Haryanto <stevenharyanto@gmail.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Steven Haryanto.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+
+
+__END__
+
