@@ -3,7 +3,7 @@
 # workaround for dzil
 package download_mandiri;
 BEGIN {
-  $download_mandiri::VERSION = '0.17';
+  $download_mandiri::VERSION = '0.18';
 }
 
 use 5.010;
@@ -112,7 +112,7 @@ download_mandiri
 
 =head1 VERSION
 
-version 0.17
+version 0.18
 
 =head1 SYNOPSIS
 
@@ -126,9 +126,8 @@ Then:
 
  $ download-mandiri
 
-For quieter output:
-
- $ QUIET=1 download-mandiri
+Get your statements in data dir (defaults to ~/mandiri/). See logs in your log
+dir (defaults to ~/mandiri/logs).
 
 =head1 DESCRIPTION
 
