@@ -17,12 +17,13 @@ my %module_build_args = (
     'Steven Haryanto <stevenharyanto@gmail.com>'
   ],
   'dist_name' => 'Finance-Bank-ID-Mandiri',
-  'dist_version' => '0.18',
+  'dist_version' => '0.19',
   'license' => 'perl',
   'module_name' => 'Finance::Bank::ID::Mandiri',
   'recommends' => {},
   'recursive_test_files' => 1,
   'requires' => {
+    'App::Options' => '0',
     'Data::Dumper' => '0',
     'Data::Rmap' => '0',
     'File::Slurp' => '0',

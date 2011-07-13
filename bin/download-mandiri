@@ -3,7 +3,7 @@
 # workaround for dzil
 package download_mandiri;
 BEGIN {
-  $download_mandiri::VERSION = '0.18';
+  $download_mandiri::VERSION = '0.19';
 }
 
 use 5.010;
@@ -112,7 +112,7 @@ download_mandiri
 
 =head1 VERSION
 
-version 0.18
+version 0.19
 
 =head1 SYNOPSIS
 

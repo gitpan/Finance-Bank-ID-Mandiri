@@ -14,6 +14,7 @@ meta-spec:
   version: 1.4
 name: Finance-Bank-ID-Mandiri
 requires:
+  App::Options: 0
   Data::Dumper: 0
   Data::Rmap: 0
   File::Slurp: 0
@@ -27,4 +28,4 @@ requires:
 resources:
   homepage: http://search.cpan.org/dist/Finance-Bank-ID-Mandiri/
   repository: http://github.com/sharyanto/perl-Finance-Bank-ID-Mandiri
-version: 0.18
+version: 0.19

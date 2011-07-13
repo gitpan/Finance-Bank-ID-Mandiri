@@ -1,18 +1,17 @@
 package Finance::Bank::ID::Mandiri;
 BEGIN {
-  $Finance::Bank::ID::Mandiri::VERSION = '0.18';
+  $Finance::Bank::ID::Mandiri::VERSION = '0.19';
 }
-# ABSTRACT: Check your Bank Mandiri accounts from Perl
 
-
+use 5.010;
 use Moo;
 use DateTime;
 
 extends 'Finance::Bank::ID::Base';
 
+our $VERSION = '0.19'; # VERSION
 
 has _variant => (is => 'rw'); # retail or pt
-
 
 sub _make_readonly_inputs_rw {
     my ($self, @forms) = @_;
@@ -23,14 +22,12 @@ sub _make_readonly_inputs_rw {
     }
 }
 
-
 sub BUILD {
     my ($self, $args) = @_;
 
     $self->site("https://ib.bankmandiri.co.id") unless $self->site;
     $self->https_host("ib.bankmandiri.co.id") unless $self->https_host;
 }
-
 
 sub login {
     my ($self) = @_;
@@ -69,7 +66,6 @@ sub login {
                 });
     $self->logged_in(1);
 }
-
 
 sub logout {
     my ($self) = @_;
@@ -110,12 +106,10 @@ sub _get_an_account_id {
     die "cannot find any account ID";
 }
 
-
 sub list_accounts {
     my ($self) = @_;
     keys %{ $self->_parse_accounts(1) };
 }
-
 
 sub check_balance {
     my ($self, $account) = @_;
@@ -134,7 +128,6 @@ sub check_balance {
                 });
     $bal;
 }
-
 
 sub get_statement {
     my ($self, %args) = @_;
@@ -177,7 +170,6 @@ sub get_statement {
     return if !$resp || $resp->[0] != 200;
     $resp->[2];
 }
-
 
 sub _ps_detect {
     my ($self, $page) = @_;
@@ -317,7 +309,7 @@ sub _ps_get_metadata_cms {
 sub _ps_get_metadata_mcm {
     my ($self, $page, $stmt) = @_;
 
-    unless ($page =~ m!^(\d{13});(\w{3});(\d\d)/(\d\d)/(\d\d\d\d)!) {
+    unless ($page =~ m!^(\d{13});(\w{3});(?:\d{4});(\d\d)/(\d\d)/(\d\d\d\d)!) {
         return "can't get account number & currency & date";
     }
     $stmt->{account} = $1;
@@ -327,9 +319,11 @@ sub _ps_get_metadata_mcm {
     # we'll just assume the first and last transaction date to be start and end
     # date of statement, because the semicolon format doesn't include any other
     # metadata.
-    if ($page =~ m!.+^(\d{13});(\w{3});(\d\d)/(\d\d)/(\d\d\d\d)!ms) {
-        $stmt->{end_date} = DateTime->new(day=>$3, month=>$4, year=>$5);
+    unless ($page =~
+                m!.+^(\d{13});(\w{3});(?:\d{4});(\d\d)/(\d\d)/(\d\d\d\d)!ms) {
+        return "can't get end date";
     }
+    $stmt->{end_date} = DateTime->new(day=>$3, month=>$4, year=>$5);
 
     # Mandiri sucks, doesn't provide total credit/debit in statement
     my $n = 0;
@@ -474,19 +468,33 @@ sub _ps_get_transactions_cms {
 sub _ps_get_transactions_mcm {
     my ($self, $page, $stmt) = @_;
 
+    state $re_acc = qr/(?:\d{13})/;
+    state $re_currency = qr/(?:\w{3})/;
+    state $re_money = qr/(?:\d+(?:\.\d\d?)?)/;
+
     my @rows;
     my $i = 0;
     for (split /\r?\n/, $page) {
         $i++;
         next unless /\S/;
-        if      (m!^(\d{13});(\w{3});(\d\d)/(\d\d)/(\d\d\d\d)(\d\d\d\d);([^;]+);([^;]*);([^;]*);(\d+(?:\.\d\d?)?)(DR)?;(\d+(?:\.\d\d?)?)(DR)?$!mgx) {
+        # new format, jul 2011
+        if      (m!^($re_acc);($re_currency);(\d{4});(\d\d)/(\d\d)/(\d\d\d\d);([^;]+);([^;]*);([^;]*);($re_money);($re_money);($re_money)$!mgx) {
+            push @rows, {
+                account   => $1, currency => $2, txcode    => $3, day     => $4,
+                month     => $5, year     => $6, desc1     => $7, desc2   => $8,
+                desc3     => $9, amount_db=>$10, amount_cr =>$11, balance =>$12,
+            };
+            die "Invalid data in line $i: both DB & CR amount ".
+                "($rows[-1]{amount_cr} & $rows[-1]{amount_db}) exist!"
+                    if $rows[-1]{amount_cr}+0 && $rows[-1]{amount_db}+0;
+        } elsif      (m!^($re_acc);($re_currency);(\d\d)/(\d\d)/(\d\d\d\d)(\d\d\d\d);([^;]+);([^;]*);([^;]*);($re_money)(DR)?;($re_money)(DR)?$!mgx) {
             push @rows, {
                 account   => $1, currency=> $2, day       => $3, month   => $4,
                 year      => $5, txcode  => $6, desc1     => $7, desc2   => $8,
                 desc3     => $9, amount  =>$10, amount_db =>$11, balance =>$12,
                 balance_db=>$13,
             };
-        } elsif (m!^(\d{13});(\w{3});(\d\d)/(\d\d)/(\d\d\d\d)(\d\d\d\d);([^;]+);([^;]*);        (\d+(?:\.\d\d?)?)(DR)?;(\d+(?:\.\d\d?)?)(DR)?$!mgx) {
+        } elsif (m!^($re_acc);($re_currency);(\d\d)/(\d\d)/(\d\d\d\d)(\d\d\d\d);([^;]+);([^;]*);        ($re_money)(DR)?;($re_money)(DR)?$!mgx) {
             push @rows, {
                 account  => $1, currency => $2, day    => $3, month     => $4,
                 year     => $5, txcode   => $6, desc1  => $7, desc2     => $8,
@@ -517,8 +525,8 @@ sub _ps_get_transactions_mcm {
             ($row->{desc2} ? "\n" . $row->{desc2} : "") .
                 ($row->{desc3} ? "\n" . $row->{desc3} : "");
 
-        $tx->{amount}  = ($row->{amount_db}  ? -1 : 1) * $row->{amount};
-        $tx->{balance} = ($row->{balance_db} ? -1 : 1) * $row->{balance};
+        $tx->{amount}  = $row->{amount_db}+0 ?
+            -$row->{amount_db} : $row->{amount_cr};
 
         if (!$last_date || DateTime->compare($last_date, $tx->{date})) {
             $seq = 1;
@@ -535,6 +543,9 @@ sub _ps_get_transactions_mcm {
 }
 
 1;
+# ABSTRACT: Check your Bank Mandiri accounts from Perl
+
+
 
 __END__
 =pod
@@ -545,7 +556,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.18
+version 0.19
 
 =head1 SYNOPSIS
 
@@ -572,7 +583,7 @@ version 0.18
         my $bal = $ibank->check_balance($acct); # $acct is optional
 
         my $stmt = $ibank->get_statement(
-            account    => ..., # opt, default account will be used if not specified
+            account    => ..., # opt, default account used if not undef
             days       => 31,  # opt
             start_date => DateTime->new(year=>2009, month=>10, day=>6),
                                # opt, takes precedence over 'days'
@@ -592,8 +603,8 @@ version 0.18
     # utility routines
     my $res = $ibank->parse_statement($html_or_copy_pasted_text);
 
-Also see the examples/ subdirectory in the distribution for a sample script using
-this module.
+Also see the examples/ subdirectory in the distribution for a sample script
+using this module.
 
 =head1 DESCRIPTION
 
@@ -605,18 +616,18 @@ certificate verification). L<WWW::Mechanize> is required but you can supply your
 own mech-like object.
 
 Aside from the above site for invididual accounts, there are also 2 other sites
-for corporate accounts: https://cms.bankmandiri.co.id/ecbanking/ (henceforth CMS)
-and https://mcm.bankmandiri.co.id/ (henceforth MCM). CMS is the older version and
-as of the end of Sept, 2010 has been discontinued.
+for corporate accounts: https://cms.bankmandiri.co.id/ecbanking/ (henceforth
+CMS) and https://mcm.bankmandiri.co.id/ (henceforth MCM). CMS is the older
+version and as of the end of Sept, 2010 has been discontinued.
 
 This module currently can only login to IB and not CMS/MCM, but this module can
 parse statement page from all 3 sites. For CMS version, only text version [copy
-paste result] is currently supported and not HTML. For MCM, only semicolon format
-is currently supported.
+paste result] is currently supported and not HTML. For MCM, only semicolon
+format is currently supported.
 
-Warning: This module is neither offical nor is it tested to be 100% save! Because
-of the nature of web-robots, everything may break from one day to the other when
-the underlying web interface changes.
+Warning: This module is neither offical nor is it tested to be 100% save!
+Because of the nature of web-robots, everything may break from one day to the
+other when the underlying web interface changes.
 
 =head1 WARNING
 
@@ -673,12 +684,13 @@ L<Win32::IE::Mechanize>, etc.
 
 =item * verify_https
 
-Optional. If you are using the default mech object (see previous option), you can
-set this option to 1 to enable SSL certificate verification (recommended for
+Optional. If you are using the default mech object (see previous option), you
+can set this option to 1 to enable SSL certificate verification (recommended for
 security). Default is 0.
 
 SSL verification will require a CA bundle directory, default is /etc/ssl/certs.
-Adjust B<https_ca_dir> option if your CA bundle is not located in that directory.
+Adjust B<https_ca_dir> option if your CA bundle is not located in that
+directory.
 
 =item * https_ca_dir
 
@@ -772,6 +784,7 @@ into structured data:
           seq         => INT, # a number >= 1 which marks the sequence of transactions for the day
           amount      => REAL, # a real number, positive means credit (deposit), negative means debit (withdrawal)
           description => STRING,
+          branch      => STRING, # 4-digit branch/ATM code, only for MCM
         },
         # second transaction
         ...
