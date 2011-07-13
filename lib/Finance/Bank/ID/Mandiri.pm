@@ -1,7 +1,4 @@
 package Finance::Bank::ID::Mandiri;
-BEGIN {
-  $Finance::Bank::ID::Mandiri::VERSION = '0.19';
-}
 
 use 5.010;
 use Moo;
@@ -9,7 +6,7 @@ use DateTime;
 
 extends 'Finance::Bank::ID::Base';
 
-our $VERSION = '0.19'; # VERSION
+our $VERSION = '0.20'; # VERSION
 
 has _variant => (is => 'rw'); # retail or pt
 
@@ -556,7 +553,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.19
+version 0.20
 
 =head1 SYNOPSIS
 
