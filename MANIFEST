@@ -10,10 +10,11 @@ dist.ini
 lib/Finance/Bank/ID/Mandiri.pm
 t/00-compile.t
 t/01-parse_statement.t
+t/data/stmt-cms.txt
+t/data/stmt-mcm-v201103.csv
+t/data/stmt-mcm-v201107.csv
 t/data/stmt1.ff35linux.txt
 t/data/stmt1.html
 t/data/stmt1.opera10linux.txt
-t/data/stmt2.txt
-t/data/stmt3.txt
 t/release-pod-coverage.t
 t/release-pod-syntax.t
