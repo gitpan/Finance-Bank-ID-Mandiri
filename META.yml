@@ -7,7 +7,7 @@ build_requires:
 configure_requires:
   Module::Build: 0.3601
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.200007, CPAN::Meta::Converter version 2.110930'
+generated_by: 'Dist::Zilla version 4.300006, CPAN::Meta::Converter version 2.113640'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -18,7 +18,7 @@ requires:
   Data::Dumper: 0
   Data::Rmap: 0
   File::Slurp: 0
-  Finance::Bank::ID::BCA: 0.17
+  Finance::Bank::ID::BCA: 0.22
   Log::Any: 0
   Log::Any::App: 0.23
   Moo: 0
@@ -28,4 +28,4 @@ requires:
 resources:
   homepage: http://search.cpan.org/dist/Finance-Bank-ID-Mandiri/
   repository: http://github.com/sharyanto/perl-Finance-Bank-ID-Mandiri
-version: 0.21
+version: 0.22

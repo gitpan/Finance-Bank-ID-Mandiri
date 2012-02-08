@@ -6,7 +6,7 @@ use DateTime;
 
 extends 'Finance::Bank::ID::Base';
 
-our $VERSION = '0.21'; # VERSION
+our $VERSION = '0.22'; # VERSION
 
 has _variant => (is => 'rw');
 has _re_tx   => (is => 'rw');
@@ -587,7 +587,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.21
+version 0.22
 
 =head1 SYNOPSIS
 
@@ -632,7 +632,7 @@ version 0.21
     if ($ibank->logged_in) { $ibank->logout() }
 
     # utility routines
-    my $res = $ibank->parse_statement($html_or_copy_pasted_text);
+    my $res = $ibank->parse_statement($html);
 
 Also see the examples/ subdirectory in the distribution for a sample script
 using this module.
@@ -797,10 +797,10 @@ Saturday/Sunday/holiday, depending on the default value set by the site's form).
 
 =back
 
-=head2 parse_statement($html_or_text, %opts) => $res
+=head2 parse_statement($html, %opts) => $res
 
-Given the HTML/copy-pasted text of the account statement results page, parse it
-into structured data:
+Given the HTML of the account statement results page, parse it into structured
+data:
 
  $stmt = {
     start_date     => $start_dt, # a DateTime object
@@ -829,13 +829,31 @@ Returns:
 C<$status> is 200 if successful or some other 3-letter code if parsing failed.
 C<$stmt> is the result (structure as above, or undef if parsing failed).
 
+Options:
+
+=over 4
+
+=item * return_datetime_obj => BOOL
+
+Default is true. If set to false, the method will return dates as strings with
+this format: 'YYYY-MM-DD HH::mm::SS' (produced by DateTime->dmy . ' ' .
+DateTime->hms). This is to make it easy to pass the data structure into YAML,
+JSON, MySQL, etc. Nevertheless, internally DateTime objects are still used.
+
+=back
+
+Additional notes:
+
+The method can also (or used to) handle copy-pasted text from the GUI browser,
+but this is no longer documented or guaranteed to keep working.
+
 =head1 AUTHOR
 
 Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Steven Haryanto.
+This software is copyright (c) 2012 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

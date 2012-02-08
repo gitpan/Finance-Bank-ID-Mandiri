@@ -6,6 +6,7 @@ MANIFEST.SKIP
 META.yml
 README
 bin/download-mandiri
+bin/parse-mandiri-statement
 dist.ini
 lib/Finance/Bank/ID/Mandiri.pm
 t/00-compile.t

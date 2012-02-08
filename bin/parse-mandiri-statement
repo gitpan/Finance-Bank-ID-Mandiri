@@ -1,0 +1,54 @@
+#!/usr/bin/perl
+
+# workaround for dzil
+package parse_mandiri_statement;
+
+use 5.010;
+use strict;
+use warnings;
+
+use Finance::Bank::ID::Mandiri;
+use YAML;
+
+my $ibank = Finance::Bank::ID::Mandiri->new;
+my $stmt = join "", <>;
+print Dump $ibank->parse_statement($stmt, return_datetime_obj=>0);
+
+1;
+# ABSTRACT: Parse Bank Mandiri internet banking statement
+
+
+__END__
+=pod
+
+=head1 NAME
+
+parse_mandiri_statement - Parse Bank Mandiri internet banking statement
+
+=head1 VERSION
+
+version 0.22
+
+=head1 SYNOPSIS
+
+ % parse-mandiri-statement < statement-page
+
+=head1 DESCRIPTION
+
+=head1 SEE ALSO
+
+L<Finance::Bank::ID::Mandiri>
+
+=head1 AUTHOR
+
+Steven Haryanto <stevenharyanto@gmail.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2012 by Steven Haryanto.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+
