@@ -35,6 +35,8 @@
             "DateTime" : 0,
             "File::HomeDir" : 0,
             "Finance::Bank::ID::Base" : "0.22",
+            "HTTP::Headers::Patch::DontUseStorable" : 0,
+            "LWP::Protocol::Net::Curl" : "0.007",
             "Log::Any" : 0,
             "Log::Any::App" : "0.23",
             "Moo" : 0,
@@ -55,6 +57,6 @@
          "url" : "http://github.com/sharyanto/perl-Finance-Bank-ID-Mandiri"
       }
    },
-   "version" : "0.23"
+   "version" : "0.24"
 }
 

@@ -6,9 +6,10 @@ use Log::Any;
 use Moo;
 use DateTime;
 
+use HTTP::Headers::Patch::DontUseStorable;
 extends 'Finance::Bank::ID::Base';
 
-our $VERSION = '0.23'; # VERSION
+our $VERSION = '0.24'; # VERSION
 
 has _variant => (is => 'rw');
 has _re_tx   => (is => 'rw');
@@ -152,7 +153,7 @@ sub check_balance {
     $self->_req(get => ["$s/retail/AccountDetail.do?action=result&ACCOUNTID=$acctid"],
                 sub {
                     my ($mech) = @_;
-                    $mech->content =~ m!>Posisi Saldo(?:<[^>]+>\s*)*:\s*(?:<[^>]+>\s*)*(?:Rp\.)&nbsp;([0-9.]+),(\d+)<!s
+                    $mech->content =~ m!>Informasi Saldo(?:<[^>]+>\s*)*:\s*(?:<[^>]+>\s*)*(?:Rp\.)&nbsp;([0-9.]+),(\d+)<!s
                         or return "cannot grep balance in result page";
                     $bal = $self->_stripD($1)+0.01*$2;
                     "";
@@ -589,7 +590,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.23
+version 0.24
 
 =head1 SYNOPSIS
 

@@ -7,7 +7,7 @@ use warnings;
 use Finance::Bank::ID::Mandiri;
 use YAML;
 
-our $VERSION = '0.23'; # VERSION
+our $VERSION = '0.24'; # VERSION
 
 my $ibank = Finance::Bank::ID::Mandiri->new;
 my $stmt = join "", <>;
@@ -27,7 +27,7 @@ parse-mandiri-statement - Parse Bank Mandiri internet banking statement
 
 =head1 VERSION
 
-version 0.23
+version 0.24
 
 =head1 SYNOPSIS
 

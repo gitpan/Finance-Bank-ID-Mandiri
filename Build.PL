@@ -18,7 +18,7 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Finance-Bank-ID-Mandiri",
-  "dist_version" => "0.23",
+  "dist_version" => "0.24",
   "license" => "perl",
   "module_name" => "Finance::Bank::ID::Mandiri",
   "recommends" => {},
@@ -28,6 +28,8 @@ my %module_build_args = (
     "DateTime" => 0,
     "File::HomeDir" => 0,
     "Finance::Bank::ID::Base" => "0.22",
+    "HTTP::Headers::Patch::DontUseStorable" => 0,
+    "LWP::Protocol::Net::Curl" => "0.007",
     "Log::Any" => 0,
     "Log::Any::App" => "0.23",
     "Moo" => 0,
