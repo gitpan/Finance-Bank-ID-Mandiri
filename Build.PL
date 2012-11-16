@@ -7,6 +7,7 @@ use Module::Build 0.3601;
 
 my %module_build_args = (
   "build_requires" => {
+    "File::Slurp" => 0,
     "Module::Build" => "0.3601"
   },
   "configure_requires" => {
@@ -17,21 +18,19 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Finance-Bank-ID-Mandiri",
-  "dist_version" => "0.22",
+  "dist_version" => "0.23",
   "license" => "perl",
   "module_name" => "Finance::Bank::ID::Mandiri",
   "recommends" => {},
   "recursive_test_files" => 1,
   "requires" => {
     "App::Options" => 0,
-    "Data::Dumper" => 0,
-    "Data::Rmap" => 0,
-    "File::Slurp" => 0,
-    "Finance::Bank::ID::BCA" => "0.22",
+    "DateTime" => 0,
+    "File::HomeDir" => 0,
+    "Finance::Bank::ID::Base" => "0.22",
     "Log::Any" => 0,
     "Log::Any::App" => "0.23",
     "Moo" => 0,
-    "WWW::Mechanize" => 0,
     "YAML" => 0,
     "perl" => "5.010000"
   },

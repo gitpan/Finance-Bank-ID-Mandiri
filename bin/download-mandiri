@@ -1,8 +1,5 @@
 #!/usr/bin/perl
 
-# workaround for dzil
-package download_mandiri;
-
 use 5.010;
 use strict;
 use warnings;
@@ -13,6 +10,8 @@ use File::Path;
 use File::Slurp;
 use Finance::Bank::ID::Mandiri;
 use YAML;
+
+our $VERSION = '0.23'; # VERSION
 
 # we don't use required=>1 because App::Options still works in BEGIN phase and
 # thus breaks perl -c.
@@ -95,17 +94,20 @@ eval { $ibank->logout; };
 
 $log->info("End session");
 
+# ABSTRACT: Download Mandiri statements
+# PODNAME: download-mandiri
 
 
+__END__
 =pod
 
 =head1 NAME
 
-download_mandiri
+download-mandiri - Download Mandiri statements
 
 =head1 VERSION
 
-version 0.22
+version 0.23
 
 =head1 SYNOPSIS
 
@@ -144,7 +146,4 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
 

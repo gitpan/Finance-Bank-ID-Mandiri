@@ -1,8 +1,5 @@
 #!/usr/bin/perl
 
-# workaround for dzil
-package parse_mandiri_statement;
-
 use 5.010;
 use strict;
 use warnings;
@@ -10,12 +7,15 @@ use warnings;
 use Finance::Bank::ID::Mandiri;
 use YAML;
 
+our $VERSION = '0.23'; # VERSION
+
 my $ibank = Finance::Bank::ID::Mandiri->new;
 my $stmt = join "", <>;
 print Dump $ibank->parse_statement($stmt, return_datetime_obj=>0);
 
 1;
 # ABSTRACT: Parse Bank Mandiri internet banking statement
+# PODNAME: parse-mandiri-statement
 
 
 __END__
@@ -23,11 +23,11 @@ __END__
 
 =head1 NAME
 
-parse_mandiri_statement - Parse Bank Mandiri internet banking statement
+parse-mandiri-statement - Parse Bank Mandiri internet banking statement
 
 =head1 VERSION
 
-version 0.22
+version 0.23
 
 =head1 SYNOPSIS
 

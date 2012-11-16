@@ -3,6 +3,7 @@ Changes
 LICENSE
 MANIFEST
 MANIFEST.SKIP
+META.json
 META.yml
 README
 bin/download-mandiri
@@ -19,3 +20,4 @@ t/data/stmt1.html
 t/data/stmt1.opera10linux.txt
 t/release-pod-coverage.t
 t/release-pod-syntax.t
+t/release-rinci.t

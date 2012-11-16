@@ -1,12 +1,14 @@
 package Finance::Bank::ID::Mandiri;
 
 use 5.010;
+use Log::Any;
+
 use Moo;
 use DateTime;
 
 extends 'Finance::Bank::ID::Base';
 
-our $VERSION = '0.22'; # VERSION
+our $VERSION = '0.23'; # VERSION
 
 has _variant => (is => 'rw');
 has _re_tx   => (is => 'rw');
@@ -111,7 +113,7 @@ sub _parse_accounts {
     $self->logger->debug("Parsing accounts from transaction history form page ...");
     $self->_req(get => [$self->site . "/retail/TrxHistoryInq.do?action=form"]) if $retrieve;
     my $ct = $self->mech->content;
-    $ct =~ /HISTORI TRANSAKSI/ or
+    $ct =~ /(HISTORI TRANSAKSI|MUTASI REKENING)/ or
         die "failed getting transaction history form page";
     $ct =~ m!<select name="fromAccountID">(.+?)</select>!si or
         die "failed getting the list of accounts select box (fromAccountID)";
@@ -202,7 +204,7 @@ sub get_statement {
 
 sub _ps_detect {
     my ($self, $page) = @_;
-    if ($page =~ /(?:^|"header">)HISTORI TRANSAKSI/m) {
+    if ($page =~ /(?:^|"header">)(HISTORI TRANSAKSI|MUTASI REKENING)/m) {
         $self->_variant('ib');
         return '';
     } elsif ($page =~ /^CMS-Mandiri/ms) {
@@ -587,7 +589,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.22
+version 0.23
 
 =head1 SYNOPSIS
 
@@ -656,7 +658,7 @@ parse statement page from all 3 sites. For CMS version, only text version [copy
 paste result] is currently supported and not HTML. For MCM, only semicolon
 format is currently supported.
 
-Warning: This module is neither offical nor is it tested to be 100% save!
+Warning: This module is neither offical nor is it tested to be 100% safe!
 Because of the nature of web-robots, everything may break from one day to the
 other when the underlying web interface changes.
 

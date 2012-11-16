@@ -2,7 +2,7 @@ NAME
     Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 VERSION
-    version 0.22
+    version 0.23
 
 SYNOPSIS
         use Finance::Bank::ID::Mandiri;
@@ -71,7 +71,7 @@ DESCRIPTION
     For MCM, only semicolon format is currently supported.
 
     Warning: This module is neither offical nor is it tested to be 100%
-    save! Because of the nature of web-robots, everything may break from one
+    safe! Because of the nature of web-robots, everything may break from one
     day to the other when the underlying web interface changes.
 
 WARNING

@@ -3,6 +3,7 @@ abstract: 'Check your Bank Mandiri accounts from Perl'
 author:
   - 'Steven Haryanto <stevenharyanto@gmail.com>'
 build_requires:
+  File::Slurp: 0
   Module::Build: 0.3601
 configure_requires:
   Module::Build: 0.3601
@@ -15,17 +16,15 @@ meta-spec:
 name: Finance-Bank-ID-Mandiri
 requires:
   App::Options: 0
-  Data::Dumper: 0
-  Data::Rmap: 0
-  File::Slurp: 0
-  Finance::Bank::ID::BCA: 0.22
+  DateTime: 0
+  File::HomeDir: 0
+  Finance::Bank::ID::Base: 0.22
   Log::Any: 0
   Log::Any::App: 0.23
   Moo: 0
-  WWW::Mechanize: 0
   YAML: 0
   perl: 5.010000
 resources:
   homepage: http://search.cpan.org/dist/Finance-Bank-ID-Mandiri/
   repository: http://github.com/sharyanto/perl-Finance-Bank-ID-Mandiri
-version: 0.22
+version: 0.23
