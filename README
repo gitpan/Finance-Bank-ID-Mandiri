@@ -2,7 +2,7 @@ NAME
     Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 VERSION
-    version 0.24
+    version 0.25
 
 SYNOPSIS
         use Finance::Bank::ID::Mandiri;
@@ -29,7 +29,7 @@ SYNOPSIS
 
             my $stmt = $ibank->get_statement(
                 account    => ..., # opt, default account used if not undef
-                days       => 31,  # opt
+                days       => 30,  # opt
                 start_date => DateTime->new(year=>2009, month=>10, day=>6),
                                    # opt, takes precedence over 'days'
                 end_date   => DateTime->today, # opt, takes precedence over 'days'
@@ -183,12 +183,15 @@ METHODS
 
     *   days
 
-        Optional. Number of days between 1 and 31. If days is 1, then start
-        date and end date will be the same. Default is 31.
+        Optional. Number of days. If days is 1, then start date and end date
+        will be the same.
 
     *   start_date
 
-        Optional. Default is end_date - days.
+        Optional. Default is "end_date" - 1 month, which seems to be the
+        current limit set by the bank (for example, if "end_date" is
+        2013-03-08, then "start_date" will be set to 2013-02-08). If not set
+        and "days" is set, will be set to "end_date" - "days".
 
     *   end_date
 
@@ -247,7 +250,7 @@ AUTHOR
     Steven Haryanto <stevenharyanto@gmail.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2012 by Steven Haryanto.
+    This software is copyright (c) 2013 by Steven Haryanto.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.

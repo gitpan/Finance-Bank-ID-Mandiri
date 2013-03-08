@@ -12,7 +12,7 @@ use LWP::Protocol::Net::Curl sslversion => 3;
 use Finance::Bank::ID::Mandiri;
 use YAML;
 
-our $VERSION = '0.24'; # VERSION
+our $VERSION = '0.25'; # VERSION
 
 # we don't use required=>1 because App::Options still works in BEGIN phase and
 # thus breaks perl -c.
@@ -27,7 +27,7 @@ use App::Options (
                        default => File::HomeDir->my_home . "/mandiri" },
         log_dir   => { type => 'string',   # req
                        default => File::HomeDir->my_home . "/mandiri/logs" },
-        days      => { type => 'string', required => 0, default => 31 },
+        days      => { type => 'string', required => 0 },
     },
 );
 
@@ -108,7 +108,7 @@ download-mandiri - Download Mandiri statements
 
 =head1 VERSION
 
-version 0.24
+version 0.25
 
 =head1 SYNOPSIS
 
@@ -128,8 +128,9 @@ dir (defaults to ~/mandiri/logs).
 =head1 DESCRIPTION
 
 This is a command-line script which you can run from cron or whatever to
-conveniently download Bank Mandiri statements. By default, it downloads 31-day's
-worth of statements to ~/mandiri/. To change this, use --days and --data_dir.
+conveniently download Bank Mandiri statements. By default, it downloads 1
+month's worth of statements to ~/mandiri/. To change this, use --days and
+--data_dir.
 
 =head1 SEE ALSO
 
@@ -141,7 +142,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Steven Haryanto.
+This software is copyright (c) 2013 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
