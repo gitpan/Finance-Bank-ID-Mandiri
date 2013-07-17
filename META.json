@@ -44,7 +44,7 @@
             "Log::Any::App" : "0.23",
             "Moo" : "0",
             "YAML" : "0",
-            "perl" : "5.010000"
+            "perl" : "5.010001"
          }
       },
       "test" : {
@@ -60,6 +60,6 @@
          "url" : "http://github.com/sharyanto/perl-Finance-Bank-ID-Mandiri"
       }
    },
-   "version" : "0.25"
+   "version" : "0.26"
 }
 

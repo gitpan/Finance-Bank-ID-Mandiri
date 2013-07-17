@@ -18,7 +18,7 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Finance-Bank-ID-Mandiri",
-  "dist_version" => "0.25",
+  "dist_version" => "0.26",
   "license" => "perl",
   "module_name" => "Finance::Bank::ID::Mandiri",
   "recommends" => {},
@@ -34,7 +34,7 @@ my %module_build_args = (
     "Log::Any::App" => "0.23",
     "Moo" => 0,
     "YAML" => 0,
-    "perl" => "5.010000"
+    "perl" => "5.010001"
   },
   "script_files" => [
     "bin/parse-mandiri-statement",

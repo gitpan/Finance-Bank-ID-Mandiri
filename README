@@ -2,9 +2,15 @@ NAME
     Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 VERSION
-    version 0.25
+    version 0.26
 
 SYNOPSIS
+    If you just want to download banking statements, and you use Linux/Unix,
+    you might want to use the download-mandiri script instead of having to
+    deal with this library directly.
+
+    If you want to use the library in your Perl application:
+
         use Finance::Bank::ID::Mandiri;
 
         # FBI::Mandiri uses Log::Any. to show logs, use something like:

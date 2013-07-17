@@ -1,6 +1,6 @@
 package Finance::Bank::ID::Mandiri;
 
-use 5.010;
+use 5.010001;
 
 use Moo;
 use DateTime;
@@ -9,7 +9,7 @@ use HTTP::Headers;
 use HTTP::Headers::Patch::DontUseStorable -load_target=>0;
 extends 'Finance::Bank::ID::Base';
 
-our $VERSION = '0.25'; # VERSION
+our $VERSION = '0.26'; # VERSION
 
 has _variant => (is => 'rw');
 has _re_tx   => (is => 'rw');
@@ -605,9 +605,15 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.25
+version 0.26
 
 =head1 SYNOPSIS
+
+If you just want to download banking statements, and you use Linux/Unix, you
+might want to use the L<download-mandiri> script instead of having to deal with
+this library directly.
+
+If you want to use the library in your Perl application:
 
     use Finance::Bank::ID::Mandiri;
 
