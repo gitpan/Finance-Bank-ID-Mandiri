@@ -1,0 +1,82 @@
+
+use strict;
+use warnings;
+
+use 5.010001;
+
+use ExtUtils::MakeMaker 6.30;
+
+
+
+my %WriteMakefileArgs = (
+  "ABSTRACT" => "Check your Bank Mandiri accounts from Perl",
+  "AUTHOR" => "Steven Haryanto <stevenharyanto\@gmail.com>",
+  "BUILD_REQUIRES" => {},
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
+  },
+  "DISTNAME" => "Finance-Bank-ID-Mandiri",
+  "EXE_FILES" => [
+    "bin/parse-mandiri-statement",
+    "bin/download-mandiri"
+  ],
+  "LICENSE" => "perl",
+  "NAME" => "Finance::Bank::ID::Mandiri",
+  "PREREQ_PM" => {
+    "App::Options" => 0,
+    "DateTime" => 0,
+    "File::HomeDir" => 0,
+    "Finance::Bank::ID::Base" => "0.28",
+    "HTTP::Headers" => 0,
+    "HTTP::Headers::Patch::DontUseStorable" => "0.03",
+    "LWP::Protocol::Net::Curl" => "0.007",
+    "Log::Any::App" => "0.23",
+    "Moo" => 0,
+    "YAML" => 0
+  },
+  "TEST_REQUIRES" => {
+    "File::Slurp" => 0,
+    "File::Spec" => 0,
+    "IO::Handle" => 0,
+    "IPC::Open3" => 0,
+    "Test::More" => 0
+  },
+  "VERSION" => "0.27",
+  "test" => {
+    "TESTS" => "t/*.t"
+  }
+);
+
+
+my %FallbackPrereqs = (
+  "App::Options" => 0,
+  "DateTime" => 0,
+  "File::HomeDir" => 0,
+  "File::Slurp" => 0,
+  "File::Spec" => 0,
+  "Finance::Bank::ID::Base" => "0.28",
+  "HTTP::Headers" => 0,
+  "HTTP::Headers::Patch::DontUseStorable" => "0.03",
+  "IO::Handle" => 0,
+  "IPC::Open3" => 0,
+  "LWP::Protocol::Net::Curl" => "0.007",
+  "Log::Any::App" => "0.23",
+  "Moo" => 0,
+  "Test::More" => 0,
+  "YAML" => 0
+);
+
+
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
+  delete $WriteMakefileArgs{TEST_REQUIRES};
+  delete $WriteMakefileArgs{BUILD_REQUIRES};
+  $WriteMakefileArgs{PREREQ_PM} = \%FallbackPrereqs;
+}
+
+delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
+  unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
+
+WriteMakefile(%WriteMakefileArgs);
+
+
+

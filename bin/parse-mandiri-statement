@@ -7,7 +7,7 @@ use warnings;
 use Finance::Bank::ID::Mandiri;
 use YAML;
 
-our $VERSION = '0.26'; # VERSION
+our $VERSION = '0.27'; # VERSION
 
 my $ibank = Finance::Bank::ID::Mandiri->new;
 my $stmt = join "", <>;
@@ -17,9 +17,11 @@ print Dump $ibank->parse_statement($stmt, return_datetime_obj=>0);
 # ABSTRACT: Parse Bank Mandiri internet banking statement
 # PODNAME: parse-mandiri-statement
 
-
 __END__
+
 =pod
+
+=encoding utf-8
 
 =head1 NAME
 
@@ -27,7 +29,7 @@ parse-mandiri-statement - Parse Bank Mandiri internet banking statement
 
 =head1 VERSION
 
-version 0.26
+version 0.27
 
 =head1 SYNOPSIS
 
@@ -38,6 +40,23 @@ version 0.26
 =head1 SEE ALSO
 
 L<Finance::Bank::ID::Mandiri>
+
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Finance-Bank-ID-Mandiri>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Finance-Bank-ID-Mandiri>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Finance-Bank-ID-Mandiri
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
 
 =head1 AUTHOR
 
@@ -51,4 +70,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

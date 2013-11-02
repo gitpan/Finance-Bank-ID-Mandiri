@@ -1,10 +1,10 @@
-Build.PL
 Changes
 LICENSE
 MANIFEST
 MANIFEST.SKIP
 META.json
 META.yml
+Makefile.PL
 README
 bin/download-mandiri
 bin/parse-mandiri-statement
@@ -21,3 +21,4 @@ t/data/stmt1.opera10linux.txt
 t/release-pod-coverage.t
 t/release-pod-syntax.t
 t/release-rinci.t
+weaver.ini

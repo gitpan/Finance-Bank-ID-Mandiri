@@ -2,7 +2,7 @@ NAME
     Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 VERSION
-    version 0.26
+    version 0.27
 
 SYNOPSIS
     If you just want to download banking statements, and you use Linux/Unix,
@@ -53,9 +53,6 @@ SYNOPSIS
 
         # utility routines
         my $res = $ibank->parse_statement($html);
-
-    Also see the examples/ subdirectory in the distribution for a sample
-    script using this module.
 
 DESCRIPTION
     This module provide a rudimentary interface to the web-based online
@@ -251,6 +248,21 @@ METHODS
 
     The method can also (or used to) handle copy-pasted text from the GUI
     browser, but this is no longer documented or guaranteed to keep working.
+
+HOMEPAGE
+    Please visit the project's homepage at
+    <https://metacpan.org/release/Finance-Bank-ID-Mandiri>.
+
+SOURCE
+    Source repository is at
+    <https://github.com/sharyanto/perl-Finance-Bank-ID-Mandiri>.
+
+BUGS
+    Please report any bugs or feature requests on the bugtracker website
+    http://rt.cpan.org/Public/Dist/Display.html?Name=Finance-Bank-ID-Mandiri
+
+    When submitting a bug or request, please include a test-file or a patch
+    to an existing test-file that illustrates the bug or desired feature.
 
 AUTHOR
     Steven Haryanto <stevenharyanto@gmail.com>

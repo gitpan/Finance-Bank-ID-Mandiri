@@ -4,11 +4,14 @@ author:
   - 'Steven Haryanto <stevenharyanto@gmail.com>'
 build_requires:
   File::Slurp: 0
-  Module::Build: 0.3601
+  File::Spec: 0
+  IO::Handle: 0
+  IPC::Open3: 0
+  Test::More: 0
 configure_requires:
-  Module::Build: 0.3601
+  ExtUtils::MakeMaker: 6.30
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300028, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Dist::Zilla version 5.001, CPAN::Meta::Converter version 2.132140'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -18,7 +21,7 @@ requires:
   App::Options: 0
   DateTime: 0
   File::HomeDir: 0
-  Finance::Bank::ID::Base: 0.22
+  Finance::Bank::ID::Base: 0.28
   HTTP::Headers: 0
   HTTP::Headers::Patch::DontUseStorable: 0.03
   LWP::Protocol::Net::Curl: 0.007
@@ -26,7 +29,5 @@ requires:
   Moo: 0
   YAML: 0
   perl: 5.010001
-resources:
-  homepage: http://search.cpan.org/dist/Finance-Bank-ID-Mandiri/
-  repository: http://github.com/sharyanto/perl-Finance-Bank-ID-Mandiri
-version: 0.26
+resources: {}
+version: 0.27

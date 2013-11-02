@@ -12,7 +12,7 @@ use LWP::Protocol::Net::Curl sslversion => 3;
 use Finance::Bank::ID::Mandiri;
 use YAML;
 
-our $VERSION = '0.26'; # VERSION
+our $VERSION = '0.27'; # VERSION
 
 # we don't use required=>1 because App::Options still works in BEGIN phase and
 # thus breaks perl -c.
@@ -27,6 +27,9 @@ use App::Options (
                        default => File::HomeDir->my_home . "/mandiri" },
         log_dir   => { type => 'string',   # req
                        default => File::HomeDir->my_home . "/mandiri/logs" },
+        save_dir  => { type => 'string',   # req
+                       default => File::HomeDir->my_home . "/mandiri/logs/save" },
+        mode      => { type => 'string', default => '' },
         days      => { type => 'string', required => 0 },
     },
 );
@@ -60,6 +63,8 @@ my $ibank = Finance::Bank::ID::Mandiri->new(
     logger       => $log,
     logger_dump  => Log::Any->get_logger(category => "Dumps"),
     verify_https => 1,
+    save_dir     => $App::options{save_dir},
+    mode         => $App::options{mode},
 );
 
 eval {
@@ -98,9 +103,11 @@ $log->info("End session");
 # ABSTRACT: Download Mandiri statements
 # PODNAME: download-mandiri
 
-
 __END__
+
 =pod
+
+=encoding utf-8
 
 =head1 NAME
 
@@ -108,7 +115,7 @@ download-mandiri - Download Mandiri statements
 
 =head1 VERSION
 
-version 0.26
+version 0.27
 
 =head1 SYNOPSIS
 
@@ -136,6 +143,23 @@ month's worth of statements to ~/mandiri/. To change this, use --days and
 
 L<Finance::Bank::ID::Mandiri>
 
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Finance-Bank-ID-Mandiri>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Finance-Bank-ID-Mandiri>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/Public/Dist/Display.html?Name=Finance-Bank-ID-Mandiri
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
 =head1 AUTHOR
 
 Steven Haryanto <stevenharyanto@gmail.com>
@@ -148,4 +172,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
