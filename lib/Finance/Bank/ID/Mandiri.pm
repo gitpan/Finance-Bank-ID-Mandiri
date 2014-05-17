@@ -9,7 +9,7 @@ use HTTP::Headers;
 use HTTP::Headers::Patch::DontUseStorable -load_target=>0;
 extends 'Finance::Bank::ID::Base';
 
-our $VERSION = '0.27'; # VERSION
+our $VERSION = '0.28'; # VERSION
 
 has _variant => (is => 'rw');
 has _re_tx   => (is => 'rw');
@@ -616,7 +616,7 @@ __END__
 
 =pod
 
-=encoding utf-8
+=encoding UTF-8
 
 =head1 NAME
 
@@ -624,7 +624,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-version 0.27
+This document describes version 0.28 of Finance::Bank::ID::Mandiri (from Perl distribution Finance-Bank-ID-Mandiri), released on 2014-05-17.
 
 =head1 SYNOPSIS
 
@@ -900,8 +900,7 @@ Source repository is at L<https://github.com/sharyanto/perl-Finance-Bank-ID-Mand
 
 =head1 BUGS
 
-Please report any bugs or feature requests on the bugtracker website
-http://rt.cpan.org/Public/Dist/Display.html?Name=Finance-Bank-ID-Mandiri
+Please report any bugs or feature requests on the bugtracker website L<https://rt.cpan.org/Public/Dist/Display.html?Name=Finance-Bank-ID-Mandiri>
 
 When submitting a bug or request, please include a test-file or a
 patch to an existing test-file that illustrates the bug or desired
@@ -913,7 +912,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Steven Haryanto.
+This software is copyright (c) 2014 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

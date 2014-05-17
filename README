@@ -2,7 +2,8 @@ NAME
     Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 VERSION
-    version 0.27
+    This document describes version 0.28 of Finance::Bank::ID::Mandiri (from
+    Perl distribution Finance-Bank-ID-Mandiri), released on 2014-05-17.
 
 SYNOPSIS
     If you just want to download banking statements, and you use Linux/Unix,
@@ -259,7 +260,8 @@ SOURCE
 
 BUGS
     Please report any bugs or feature requests on the bugtracker website
-    http://rt.cpan.org/Public/Dist/Display.html?Name=Finance-Bank-ID-Mandiri
+    <https://rt.cpan.org/Public/Dist/Display.html?Name=Finance-Bank-ID-Mandi
+    ri>
 
     When submitting a bug or request, please include a test-file or a patch
     to an existing test-file that illustrates the bug or desired feature.
@@ -268,7 +270,7 @@ AUTHOR
     Steven Haryanto <stevenharyanto@gmail.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2013 by Steven Haryanto.
+    This software is copyright (c) 2014 by Steven Haryanto.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.
