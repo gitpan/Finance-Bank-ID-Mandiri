@@ -1,20 +1,37 @@
-#!/usr/bin/perl
+#!perl
+
+our $DATE = '2014-08-26'; # DATE
+our $VERSION = '0.29'; # VERSION
 
 use 5.010;
 use strict;
 use warnings;
 
 use Finance::Bank::ID::Mandiri;
-use YAML;
+use Perinci::CmdLine::Any;
 
-our $VERSION = '0.28'; # VERSION
+our %SPEC;
 
-my $ibank = Finance::Bank::ID::Mandiri->new;
-my $stmt = join "", <>;
-print Dump $ibank->parse_statement($stmt, return_datetime_obj=>0);
+$SPEC{run} = {
+    v => 1.1,
+    summary => 'Parse Mandiri internet banking statement',
+    args => {
+        statement => {
+            schema => 'str*',
+            cmdline_src => 'stdin_or_files',
+        },
+    },
+};
+sub run {
+    my %args = @_;
 
-1;
-# ABSTRACT: Parse Bank Mandiri internet banking statement
+    my $ibank = Finance::Bank::ID::Mandiri->new;
+    $ibank->parse_statement($args{statement}, return_datetime_obj=>0);
+}
+
+Perinci::CmdLine::Any->new(url => '/main/run')->run;
+
+# ABSTRACT: Parse Mandiri internet banking statement
 # PODNAME: parse-mandiri-statement
 
 __END__
@@ -25,21 +42,11 @@ __END__
 
 =head1 NAME
 
-parse-mandiri-statement - Parse Bank Mandiri internet banking statement
+parse-mandiri-statement - Parse Mandiri internet banking statement
 
 =head1 VERSION
 
-This document describes version 0.28 of parse-mandiri-statement (from Perl distribution Finance-Bank-ID-Mandiri), released on 2014-05-17.
-
-=head1 SYNOPSIS
-
- % parse-mandiri-statement < statement-page
-
-=head1 DESCRIPTION
-
-=head1 SEE ALSO
-
-L<Finance::Bank::ID::Mandiri>
+This document describes version 0.29 of parse-mandiri-statement (from Perl distribution Finance-Bank-ID-Mandiri), released on 2014-08-26.
 
 =head1 HOMEPAGE
 

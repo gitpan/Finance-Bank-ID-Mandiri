@@ -2,8 +2,8 @@ NAME
     Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 VERSION
-    This document describes version 0.28 of Finance::Bank::ID::Mandiri (from
-    Perl distribution Finance-Bank-ID-Mandiri), released on 2014-05-17.
+    This document describes version 0.29 of Finance::Bank::ID::Mandiri (from
+    Perl distribution Finance-Bank-ID-Mandiri), released on 2014-08-26.
 
 SYNOPSIS
     If you just want to download banking statements, and you use Linux/Unix,
