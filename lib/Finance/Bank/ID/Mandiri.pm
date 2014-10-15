@@ -9,7 +9,7 @@ use HTTP::Headers;
 use HTTP::Headers::Patch::DontUseStorable -load_target=>0;
 extends 'Finance::Bank::ID::Base';
 
-our $VERSION = '0.29'; # VERSION
+our $VERSION = '0.30'; # VERSION
 
 has _variant => (is => 'rw');
 has _re_tx   => (is => 'rw');
@@ -624,7 +624,7 @@ Finance::Bank::ID::Mandiri - Check your Bank Mandiri accounts from Perl
 
 =head1 VERSION
 
-This document describes version 0.29 of Finance::Bank::ID::Mandiri (from Perl distribution Finance-Bank-ID-Mandiri), released on 2014-08-26.
+This document describes version 0.30 of Finance::Bank::ID::Mandiri (from Perl distribution Finance-Bank-ID-Mandiri), released on 2014-10-15.
 
 =head1 SYNOPSIS
 
@@ -890,13 +890,20 @@ Additional notes:
 The method can also (or used to) handle copy-pasted text from the GUI browser,
 but this is no longer documented or guaranteed to keep working.
 
+=head1 FAQ
+
+=head2 (2014) I'm getting error message: "Can't connect to ib.bankmandiri.co.id:443 at ..."
+
+Try upgrading your IO::Socket::SSL. It stalls with IO::Socket::SSL version 1.76,
+but works with newer versions (e.g. 1.989).
+
 =head1 HOMEPAGE
 
 Please visit the project's homepage at L<https://metacpan.org/release/Finance-Bank-ID-Mandiri>.
 
 =head1 SOURCE
 
-Source repository is at L<https://github.com/sharyanto/perl-Finance-Bank-ID-Mandiri>.
+Source repository is at L<https://github.com/perlancar/perl-Finance-Bank-ID-Mandiri>.
 
 =head1 BUGS
 
@@ -908,11 +915,11 @@ feature.
 
 =head1 AUTHOR
 
-Steven Haryanto <stevenharyanto@gmail.com>
+perlancar <perlancar@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Steven Haryanto.
+This software is copyright (c) 2014 by perlancar@cpan.org.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
